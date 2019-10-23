@@ -7,8 +7,10 @@ data(M4)
 monthly <- Filter(function(l) l$period == "Monthly", M4)
 
 dimen <- length(monthly)
+start <- 1
 
-dimen <- 20
+#dimen <- 5000
+#start <- 1001
 
 metrics_mat <- matrix(0,ncol=6, nrow=dimen)
 smape_table <- as.table(metrics_mat)
@@ -23,7 +25,7 @@ colnames(mae_table) <- c("ID_Serie","mae_Naive","mae_SNaive","mae_mae","mae_ETS"
 mase_table <- as.table(metrics_mat)
 colnames(mase_table) <- c("ID_Serie","mase_Naive","mase_SNaive","mase_mase","mase_ETS","mase_NNetar")
 
-for (i in 1:dimen) {
+for (i in start:dimen) {
   
   series <- monthly[[i]]$x
   test <- monthly[[i]]$xx
@@ -33,7 +35,6 @@ for (i in 1:dimen) {
   pred_rw <- random_walk$mean
   
   s_random_walk <- snaive(series,h=18)
-  #fore_srw <- forecast(s_random_walk,h=18)
   pred_srw <- s_random_walk$mean
   
   ts_arima <- auto.arima(series)
@@ -49,7 +50,6 @@ for (i in 1:dimen) {
   pred_nnet <- fore_nnet$mean
   
   #metrics
-  
   smape_rw <- sMAPE(actual_vals, pred_rw)
   smape_srw <- sMAPE(actual_vals, pred_srw)
   smape_arima <- sMAPE(actual_vals, pred_arima)
@@ -113,10 +113,10 @@ write.table(mase_table,file="mase.csv",sep = ", ", row.names = FALSE)
 
 models <- c("naive","snaive","arima","ets","nnet")
 
-labels_smape <- matrix(NA, nrow=dimen, ncol = 1)
-labels_rmse <- matrix(NA, nrow=dimen, ncol = 1)
-labels_mae <- matrix(NA, nrow=dimen, ncol = 1)
-labels_mase <- matrix(NA, nrow=dimen, ncol = 1)
+#labels_smape <- matrix(NA, nrow=dimen, ncol = 1)
+#labels_rmse <- matrix(NA, nrow=dimen, ncol = 1)
+#labels_mae <- matrix(NA, nrow=dimen, ncol = 1)
+#labels_mase <- matrix(NA, nrow=dimen, ncol = 1)
 
 labels <- matrix(NA, nrow=dimen, ncol = 5)
 colnames(labels) <- c("ID","sMAPE","RMSE","MAE","MASE")
@@ -125,16 +125,16 @@ colnames(labels) <- c("ID","sMAPE","RMSE","MAE","MASE")
 for (j in 1:dimen) {
   
   index_smape <- which(smape_table[j,2:6] == max(smape_table[j,2:6]))
-  labels_smape[j,1] <- models[as.numeric(index_smape[1])]
+  #labels_smape[j,1] <- models[as.numeric(index_smape[1])]
   
   index_rmse <- which(rmse_table[j,2:6] == max(rmse_table[j,2:6]))
-  labels_rmse[j,1] <- models[as.numeric(index_rmse[1])]
+  #labels_rmse[j,1] <- models[as.numeric(index_rmse[1])]
   
   index_mae <- which(mae_table[j,2:6] == max(mae_table[j,2:6]))
-  labels_mae[j,1] <- models[as.numeric(index_mae[1])]
+  #labels_mae[j,1] <- models[as.numeric(index_mae[1])]
   
   index_mase <- which(mase_table[j,2:6] == max(mase_table[j,2:6]))
-  labels_mase[j,1] <- models[as.numeric(index_mase[1])]
+  #labels_mase[j,1] <- models[as.numeric(index_mase[1])]
 
   labels[j,1] <- j
   labels[j,2] <- models[as.numeric(index_smape[1])]
@@ -147,8 +147,4 @@ for (j in 1:dimen) {
 
 write.table(labels,file="labels.csv",sep = ", ", row.names = FALSE)
 
-#write.table(labels_smape, file = "labels_smape.csv", row.names = FALSE)
-#write.table(labels_rmse, file = "labels_rmse.csv", row.names = FALSE)
-#write.table(labels_mae, file = "labels_mae.csv", row.names = FALSE)
-#write.table(labels_mase, file = "labels_mase.csv", row.names = FALSE)
 
