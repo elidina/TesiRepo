@@ -9,8 +9,8 @@ monthly <- Filter(function(l) l$period == "Monthly", M4)
 dimen <- length(monthly)
 start <- 1
 
-dimen <- 10
-start <- 1
+dimen <- 48000
+start <- 40001
 
 metrics_mat <- matrix(0,ncol=6, nrow=dimen)
 smape_table <- as.table(metrics_mat)
@@ -71,28 +71,53 @@ for (i in start:dimen) {
   smape_table[i,6] <- smape_nnet
   
   #calcolo label sMAPE
-  vect <- c(smape_rw,smape_srw,smape_arima,smape_ets,smape_nnet)
-  index <- which(vect == min(vect))
-  if(index ==1){
-    labels[i,2] <- "Naive"
-    labels[i,3] <- "Naive"
+  vect <- c(0)
+  if(!is.nan(smape_rw) & !is.infinite(smape_rw) ){
+    vect <- cbind(vect,smape_rw)
+  }
+  if(!is.nan(smape_srw) & !is.infinite(smape_srw) ){
+    vect <- cbind(vect,smape_srw)
+  }
+  if(!is.nan(smape_arima) & !is.infinite(smape_arima) ){
+    vect <- cbind(vect,smape_arima)
+  }
+  if(!is.nan(smape_ets) & !is.infinite(smape_ets) ){
+    vect <- cbind(vect,smape_ets)
+  }
+  if(!is.nan(smape_nnet) & !is.infinite(smape_nnet) ){
+    vect <- cbind(vect,smape_nnet)
+  }
+  
+  if(length(vect) == 1){
+    labels[i,2] <- NA
+    labels[i,3] <- NA
+  }else{
     
-  }
-  if(index==2){
-    labels[i,2] <- "SNaive"
-    labels[i,3] <- "SNaive"
-  }
-  if(index==3){
-    labels[i,2] <- "Arima"
-    labels[i,3] <- paste("Arima(",arima_coeff[1],",",arima_coeff[2],",",arima_coeff[3],")(",arima_coeff[4],",",arima_coeff[5],",",arima_coeff[6],")",sep="")
-  }
-  if(index==4){
-    labels[i,2] <- "ETS"
-    labels[i,3] <- ts_ets$method
-  }
-  if(index==5){
-    labels[i,2] <- "NNET"
-    labels[i,3] <- ts_nnet$method
+    vect <- vect[-1]
+    
+    index <- which(vect == min(vect))
+    
+    if(index[1] ==1){
+      labels[i,2] <- "Naive"
+      labels[i,3] <- "Naive"
+    }
+    if(index[1]==2){
+      labels[i,2] <- "SNaive"
+      labels[i,3] <- "SNaive"
+    }
+    if(index[1]==3){
+      labels[i,2] <- "Arima"
+      labels[i,3] <- paste("Arima(",arima_coeff[1],",",arima_coeff[2],",",arima_coeff[3],")(",arima_coeff[4],",",arima_coeff[5],",",arima_coeff[6],")", sep="")
+    }
+    if(index[1]==4){
+      labels[i,2] <- "ETS"
+      labels[i,3] <- ts_ets$method
+    }
+    if(index[1]==5){
+      labels[i,2] <- "NNET"
+      labels[i,3] <- ts_nnet$method
+    }
+    
   }
 
   
@@ -109,28 +134,52 @@ for (i in start:dimen) {
   rmse_table[i,5] <- rmse_ets
   rmse_table[i,6] <- rmse_nnet
   
-  label_rmse <- NULL
-  vect <- c(rmse_rw,rmse_srw,rmse_arima,rmse_ets,rmse_nnet)
-  index <- which(vect == min(vect))
-  if(index ==1){
-    labels[i,4] <- "Naive"
-    labels[i,5] <- "Naive"
+  vect <- c(0)
+  if(!is.nan(rmse_rw) & !is.infinite(rmse_rw) ){
+    vect <- cbind(vect,rmse_rw)
   }
-  if(index==2){
-    labels[i,4] <- "SNaive"
-    labels[i,5] <- "SNaive"
+  if(!is.nan(rmse_srw) & !is.infinite(rmse_srw) ){
+    vect <- cbind(vect,rmse_srw)
   }
-  if(index==3){
-    labels[i,4] <- "Arima"
-    labels[i,5] <- paste("Arima(",arima_coeff[1],",",arima_coeff[2],",",arima_coeff[3],")(",arima_coeff[4],",",arima_coeff[5],",",arima_coeff[6],")",sep="")
+  if(!is.nan(rmse_arima) & !is.infinite(rmse_arima) ){
+    vect <- cbind(vect,rmse_arima)
   }
-  if(index==4){
-    labels[i,4] <- "ETS"
-    labels[i,5] <- ts_ets$method
+  if(!is.nan(rmse_ets) & !is.infinite(rmse_ets) ){
+    vect <- cbind(vect,rmse_ets)
   }
-  if(index==5){
-    labels[i,4] <- "NNET"
-    labels[i,5]  <- ts_nnet$method
+  if(!is.nan(rmse_nnet) & !is.infinite(rmse_nnet) ){
+    vect <- cbind(vect,rmse_nnet)
+  }
+  
+  if(length(vect) == 1){
+    labels[i,4] <- NA
+    labels[i,5] <- NA
+  }else{
+    
+    vect <- vect[-1]
+    
+    index <- which(vect == min(vect))
+    if(index[1] ==1){
+      labels[i,4] <- "Naive"
+      labels[i,5] <- "Naive"
+    }
+    if(index[1]==2){
+      labels[i,4] <- "SNaive"
+      labels[i,5] <- "SNaive"
+    }
+    if(index[1]==3){
+      labels[i,4] <- "Arima"
+      labels[i,5] <- paste("Arima(",arima_coeff[1],",",arima_coeff[2],",",arima_coeff[3],")(",arima_coeff[4],",",arima_coeff[5],",",arima_coeff[6],")", sep="")
+    }
+    if(index[1]==4){
+      labels[i,4] <- "ETS"
+      labels[i,5] <- ts_ets$method
+    }
+    if(index[1]==5){
+      labels[i,4] <- "NNET"
+      labels[i,5] <- ts_nnet$method
+    }
+    
   }
   
   mae_rw <- mae(actual_vals, pred_rw)
@@ -146,28 +195,52 @@ for (i in start:dimen) {
   mae_table[i,5] <- mae_ets
   mae_table[i,6] <- mae_nnet
   
-  label_mae <- NULL
-  vect <- c(mae_rw,mae_srw,mae_arima,mae_ets,mae_nnet)
-  index <- which(vect == min(vect))
-  if(index ==1){
-    labels[i,6] <- "Naive"
-    labels[i,7] <- "Naive"
+  vect <- c(0)
+  if(!is.nan(mae_rw) & !is.infinite(mae_rw) ){
+    vect <- cbind(vect,mae_rw)
   }
-  if(index==2){
-    labels[i,6] <- "SNaive"
-    labels[i,7] <- "SNaive"
+  if(!is.nan(mae_srw) & !is.infinite(mae_srw) ){
+    vect <- cbind(vect,mae_srw)
   }
-  if(index==3){
-    labels[i,6] <- "Arima"
-    labels[i,7] <- paste("Arima(",arima_coeff[1],",",arima_coeff[2],",",arima_coeff[3],")(",arima_coeff[4],",",arima_coeff[5],",",arima_coeff[6],")",sep="")
+  if(!is.nan(mae_arima) & !is.infinite(mae_arima) ){
+    vect <- cbind(vect,mae_arima)
   }
-  if(index==4){
-    labels[i,6] <- "ETS"
-    labels[i,7] <- ts_ets$method
+  if(!is.nan(mae_ets) & !is.infinite(mae_ets) ){
+    vect <- cbind(vect,mae_ets)
   }
-  if(index==5){
-    labels[i,6] <- "NNET"
-    labels[i,7] <- ts_nnet$method
+  if(!is.nan(mae_nnet) & !is.infinite(mae_nnet) ){
+    vect <- cbind(vect,mae_nnet)
+  }
+  
+  if(length(vect) == 1){
+    labels[i,6] <- NA
+    labels[i,7] <- NA
+  }else{
+    
+    vect <- vect[-1]
+    
+    index <- which(vect == min(vect))
+    if(index[1] ==1){
+      labels[i,6] <- "Naive"
+      labels[i,7] <- "Naive"
+    }
+    if(index[1]==2){
+      labels[i,6] <- "SNaive"
+      labels[i,7] <- "SNaive"
+    }
+    if(index[1]==3){
+      labels[i,6] <- "Arima"
+      labels[i,7] <- paste("Arima(",arima_coeff[1],",",arima_coeff[2],",",arima_coeff[3],")(",arima_coeff[4],",",arima_coeff[5],",",arima_coeff[6],")", sep="")
+    }
+    if(index[1]==4){
+      labels[i,6] <- "ETS"
+      labels[i,7] <- ts_ets$method
+    }
+    if(index[1]==5){
+      labels[i,6] <- "NNET"
+      labels[i,7] <- ts_nnet$method
+    }
+    
   }
   
   mase_rw <- mase(actual_vals, pred_rw)
@@ -183,37 +256,59 @@ for (i in start:dimen) {
   mase_table[i,5] <- mase_ets
   mase_table[i,6] <- mase_nnet
   
-  label_mase <- NULL
-  vect <- c(mase_rw,mase_srw,mase_arima,mase_ets,mase_nnet)
-  index <- which(vect == min(vect))
-  if(index ==1){
-    labels[i,8] <- "Naive"
-    labels[i,9] <- "Naive"
+  vect <- c(0)
+  if(!is.nan(mase_rw) & !is.infinite(mase_rw) ){
+    vect <- cbind(vect,mase_rw)
   }
-  if(index==2){
-    labels[i,8] <- "SNaive"
-    labels[i,9] <- "SNaive"
+  if(!is.nan(mase_srw) & !is.infinite(mase_srw) ){
+    vect <- cbind(vect,mase_srw)
   }
-  if(index==3){
-    labels[i,8] <- "Arima"
-    labels[i,9] <- paste("Arima(",arima_coeff[1],",",arima_coeff[2],",",arima_coeff[3],")(",arima_coeff[4],",",arima_coeff[5],",",arima_coeff[6],")", sep="")
+  if(!is.nan(mase_arima) & !is.infinite(mase_arima) ){
+    vect <- cbind(vect,mase_arima)
   }
-  if(index==4){
-    labels[i,8] <- "ETS"
-    labels[i,9] <- ts_ets$method
+  if(!is.nan(mase_ets) & !is.infinite(mase_ets) ){
+    vect <- cbind(vect,mase_ets)
   }
-  if(index==5){
-    labels[i,8] <- "NNET"
-    labels[i,9] <- ts_nnet$method
+  if(!is.nan(mase_nnet) & !is.infinite(mase_nnet) ){
+    vect <- cbind(vect,mase_nnet)
+  }
+  
+  if(length(vect) == 1){
+    labels[i,8] <- NA
+    labels[i,9] <- NA
+  }else{
+    
+    vect <- vect[-1]
+    
+    index <- which(vect == min(vect))
+    if(index[1] ==1){
+      labels[i,8] <- "Naive"
+      labels[i,9] <- "Naive"
+    }
+    if(index[1]==2){
+      labels[i,8] <- "SNaive"
+      labels[i,9] <- "SNaive"
+    }
+    if(index[1]==3){
+      labels[i,8] <- "Arima"
+      labels[i,9] <- paste("Arima(",arima_coeff[1],",",arima_coeff[2],",",arima_coeff[3],")(",arima_coeff[4],",",arima_coeff[5],",",arima_coeff[6],")", sep="")
+    }
+    if(index[1]==4){
+      labels[i,8] <- "ETS"
+      labels[i,9] <- ts_ets$method
+    }
+    if(index[1]==5){
+      labels[i,8] <- "NNET"
+      labels[i,9] <- ts_nnet$method
+    }
+    
   }
   
 }
 
-#write.table(smape_table,file="smape.csv",sep = ", ", row.names = FALSE)
-#write.table(rmse_table,file="rmse.csv",sep = ", ", row.names = FALSE)
-#write.table(mae_table,file="mae.csv",sep = ", ", row.names = FALSE)
-#write.table(mase_table,file="mase.csv",sep = ", ", row.names = FALSE)
-
-labels
+write.table(smape_table,file="smape.csv",sep = ", ", row.names = FALSE)
+write.table(rmse_table,file="rmse.csv",sep = ", ", row.names = FALSE)
+write.table(mae_table,file="mae.csv",sep = ", ", row.names = FALSE)
+write.table(mase_table,file="mase.csv",sep = ", ", row.names = FALSE)
 
 write.table(labels,file="newlabels.csv",sep = ", ", row.names = FALSE)
