@@ -9,8 +9,8 @@ monthly <- Filter(function(l) l$period == "Monthly", M4)
 dimen <- length(monthly)
 start <- 1
 
-#dimen <- 5000
-#start <- 1001
+dimen <- 10
+start <- 1
 
 metrics_mat <- matrix(0,ncol=6, nrow=dimen)
 smape_table <- as.table(metrics_mat)

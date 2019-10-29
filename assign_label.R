@@ -3,8 +3,6 @@ df_mae <- read.csv('res/mae.csv', sep=";")
 df_rmse <- read.csv('res/rmse.csv', sep=";")
 df_mase<- read.csv('res/mase.csv', sep=";")
 
-#label assignment: lowest value
-
 models <- c("naive","snaive","arima","ets","nnet")
 dimen <- length(df_smape$ID_Serie)
 
