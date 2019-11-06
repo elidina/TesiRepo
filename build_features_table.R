@@ -4,13 +4,15 @@ library(urca)
 library(seer)
 #https://rdrr.io/github/thiyangt/seer/
 
-n_features <- 33
+labels <- read.csv('final_labels_smape.csv', sep=",",header = FALSE)
+
+n_features <- 33 + 1
 
 dimen <- 10
 
 feat_mat <- matrix(0,ncol=n_features, nrow=dimen)
 
-colnames(feat_mat) <- c("length","trend","seasonality","linearity","curvature","spikiness","e_acf1","stability","lumpiness","entropy","hurst","nonlinearity","alpha","beta","hwalpha","hwbeta","hwgamma","ur_pp","ur_kpss","y_acf1","diff1_acf1","diff2_acf1","y_acf5","diff1y_acf5","diff2_acf5","seas_acf1","sediff_acf1","sediff_seacf1","sediff_acf5","lmres_acf1","y_pacf5","diff1y_pacf5","diff2y_pacf5")
+colnames(feat_mat) <- c("length","trend","seasonality","linearity","curvature","spikiness","e_acf1","stability","lumpiness","entropy","hurst","nonlinearity","alpha","beta","hwalpha","hwbeta","hwgamma","ur_pp","ur_kpss","y_acf1","diff1_acf1","diff2_acf1","y_acf5","diff1y_acf5","diff2_acf5","seas_acf1","sediff_acf1","sediff_seacf1","sediff_acf5","lmres_acf1","y_pacf5","diff1y_pacf5","diff2y_pacf5","label")
 
 for (i in 1:10) {
   
@@ -64,5 +66,7 @@ for (i in 1:10) {
   feat_mat[i,31] <- pacf_param[1] #y_pacf5
   feat_mat[i,32] <- pacf_param[2] #diff1y_pacf5
   feat_mat[i,33] <- pacf_param[3] #diff2y_pacf5
+  
+  feat_mat[i,34] <- labels[i,1]
   
 }
