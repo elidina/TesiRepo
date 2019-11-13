@@ -60,7 +60,7 @@ for (i in 1:dimen) {
   feat_mat[i,28] <- seas_diff[2]  #sediff_seacf1
   feat_mat[i,29] <- seas_diff[3]  #sediff_acf5
   
-  #lmres_acf1
+  feat_mat[i,30] <- e_acf1(ts) #lmres_acf1
   
   pacf_param <- pacf_features(ts)
   feat_mat[i,31] <- pacf_param[1] #y_pacf5
@@ -70,3 +70,7 @@ for (i in 1:dimen) {
   feat_mat[i,34] <- labels[i,1]
   
 }
+
+df_mat <- as.data.frame(feat_mat)
+
+write.table(df_mat,file="features_table.csv",sep = ", ", row.names = FALSE)
