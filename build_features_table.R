@@ -77,20 +77,20 @@ for (i in 1:dimen) {
   
   if(df_mat$seasonality[i] == 0){
     
-    feat_mat[i,15] <- 0 #alpha hw
-    feat_mat[i,16] <- 0 #betha hw
-    feat_mat[i,17] <- 0#gamma hw
-    feat_mat[i,26] <- 0 #seas_acf1
+    df_mat$hwalpha[i] <- 0 #alpha hw
     
-    feat_mat[i,27] <- 0   #sediff_acf1
-    feat_mat[i,28] <- 0  #sediff_seacf1
-    feat_mat[i,29] <- 0  #sediff_acf5
+    df_mat$hwbeta[i] <- 0 #betha hw
+    df_mat$hwgamma[i] <- 0#gamma hw
+    df_mat$seas_acf1[i] <- 0 #seas_acf1
+    
+    df_mat$sediff_acf1[i] <- 0   #sediff_acf1
+    df_mat$sediff_seacf1[i] <- 0  #sediff_seacf1
+    df_mat$sediff_acf5[i] <- 0  #sediff_acf5
     
   }else{
-    feat_mat[i,18] <- 0 #test pp
-    feat_mat[i,19] <- 0 #test kpss
-    
-    feat_mat[i,30] <- 0  #sediff_acf5
+    df_mat$ur_pp[i] <- 0 #test pp
+    df_mat$ur_kpss[i] <- 0 #test kpss
+    df_mat$sediff_acf5[i] <- 0  #sediff_acf5
   }
   
 }
