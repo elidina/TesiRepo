@@ -73,4 +73,28 @@ for (i in 1:dimen) {
 
 df_mat <- as.data.frame(feat_mat)
 
+for (i in 1:dimen) {
+  
+  if(df_mat$seasonality[i] == 0){
+    
+    feat_mat[i,15] <- 0 #alpha hw
+    feat_mat[i,16] <- 0 #betha hw
+    feat_mat[i,17] <- 0#gamma hw
+    feat_mat[i,26] <- 0 #seas_acf1
+    
+    feat_mat[i,27] <- 0   #sediff_acf1
+    feat_mat[i,28] <- 0  #sediff_seacf1
+    feat_mat[i,29] <- 0  #sediff_acf5
+    
+  }else{
+    feat_mat[i,18] <- 0 #test pp
+    feat_mat[i,19] <- 0 #test kpss
+    
+    feat_mat[i,30] <- 0  #sediff_acf5
+  }
+  
+}
+
+
 write.table(df_mat,file="features_table.csv",sep = ", ", row.names = FALSE)
+
