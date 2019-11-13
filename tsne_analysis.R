@@ -1,20 +1,23 @@
 library(Rtsne)
 library(ggbiplot)
 
-features <- feat_mat[,-30]
-df <- as.data.frame(features)
-labs <- df$label
+s_df <- subset(df_mat, df_mat$seasonality!=0)
 
-features <- feat_mat[,-34] #no label
-features <- features[,-30]
-df_feat <- as.data.frame(features)
+#write.table(s_df,"seas_features.csv",sep = ", ", row.names = FALSE)
+
+labs <- s_df$label
+feats <- s_df[,1:33]
+feats$ur_kpss <- NULL
+feats$ur_pp <- NULL
+feats$sediff_acf5 <- NULL
+
 
 l<-as.factor(labs)
 ## for plotting
 colors = rainbow(length(unique(l)))
 names(colors) = unique(l)
 
-tsne <- Rtsne(df_feat, dims = 2, perplexity=10, verbose=TRUE, max_iter = 500, check_duplicates=FALSE)
+tsne <- Rtsne(feats, dims = 2, perplexity=30, verbose=TRUE, max_iter = 500, check_duplicates=FALSE)
 
 plot(tsne$Y, t='n', main="tSNE", xlab="tSNE dimension 1", ylab="tSNE dimension 2", "cex.main"=2, "cex.lab"=1.5)
 text(tsne$Y, labels=l, col=colors[l])
