@@ -20,6 +20,9 @@ train$label <- NULL
 test$label <- NULL
 
 m <- randomForest(x=train, y= train_y, ntree = 500, importance = TRUE, mtry=6)
+
+importance(m)
+
 pred <- predict(m, test, type="class")
 
 pred_table <- table(pred, test_y)
