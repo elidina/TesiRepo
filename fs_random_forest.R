@@ -1,49 +1,26 @@
 library(randomForest)
 
+n_trees <- 1500
+m_try <- 2
+
 df <- read.csv("seas_features.csv", sep=',')
+df$label <- factor(df$label,levels = c(1,2,3,4,5), labels = c("1", "2", "3","4","5"))
 
-df <- df[sample(nrow(df)),]
+ind <- sample(2, nrow(df), replace = TRUE, prob=c(0.8, 0.2))
 
-#split 80/20
-dimen <- nrow(df)
+df.rf <- randomForest(label ~ ., data=df[ind == 1,], ntrees=n_trees, mtry= m_try, importance=TRUE)
 
-train_dimen <- as.integer(dimen*80/100)
-test_dimen <- dimen - train_dimen
+df.pred <- predict(df.rf, df[ind == 2,])
 
-train <- df[1:train_dimen,]
-test <- df[(train_dimen+1):dimen,]
-
-train_y <- train$label
-test_y <- test$label
-
-train$label <- NULL
-test$label <- NULL
-
-m <- randomForest(x=train, y= train_y, ntree = 500, importance = TRUE, mtry=6)
-
-importance(m)
-
-pred <- predict(m, test, type="class")
-
-pred_table <- table(pred, test_y)
+r <- table(observed = df[ind==2, "label"], predicted = df.pred)
 
 acc <- 0
-
-tot <- c(0,0,0,0,0)
-per_class <- c(0,0,0,0,0)
-
-for (i in 1:test_dimen) {
-  
-  tot[test_y[i]] <- tot[test_y[i]] + 1
-  
-  if(round(pred[i]) == test_y[i]){
-    
-    per_class[test_y[i]] <- per_class[test_y[i]] + 1
-    
-    acc <- acc+1
-  }
-  
+for (j in 1:5) {
+  acc <- acc + r[j,j]
 }
 
-accuracy <- acc/(length(test_y))
-accuracy_per_class <- per_class/tot
+accuracy <- acc/length(df[ind == 2,1])
+
+importance(df.rf)
+
+varImpPlot(df.rf)

@@ -1,14 +1,14 @@
 mtry1 <- read.csv("mtry1.csv", header=TRUE)
 mtry2 <- read.csv("mtry2.csv", header=TRUE)
 
-#MTRY
+#MTRY 3 2 4 2 0 : max mtry=10/mtry=2
 
 cross_accuracy_mtry <- mtry1
 cross_accuracy_mtry$mtry15 <- mtry2$mtry15
 cross_accuracy_mtry$mtry20 <- mtry2$mtry20
 cross_accuracy_mtry$max <- "NULL"
 
-write.csv(cross_accuracy_mtry,"mtry.csv")
+#write.csv(cross_accuracy_mtry,"mtry.csv")
 
 for (i in 1:10) {
   
@@ -43,7 +43,7 @@ for (i in 1:10) {
 }
 
 ########
-#NTREES
+#NTREES 0 1 4 4 1 : ntrees=1500/2000
 
 ntrees1 <- read.csv("ntrees1.csv", header=TRUE)
 ntrees2 <- read.csv("ntrees2.csv", header=TRUE)
@@ -55,7 +55,7 @@ cross_accuracy_ntrees$ntrees2000 <- ntrees1$ntrees2000
 cross_accuracy_ntrees$ntrees2050 <- ntrees2$ntrees2050
 cross_accuracy_ntrees$max <- "NULL"
 
-write.csv(cross_accuracy_ntrees,"ntrees.csv")
+#write.csv(cross_accuracy_ntrees,"ntrees.csv")
 
 for (i in 1:10) {
   
@@ -88,3 +88,5 @@ for (i in 1:10) {
   }
   
 }
+
+#
