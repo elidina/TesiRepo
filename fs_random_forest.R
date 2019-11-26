@@ -21,6 +21,8 @@ for (j in 1:5) {
 
 accuracy <- acc/length(df[ind == 2,1])
 
-importance(df.rf)
+imp <- importance(df.rf)
+
+write.csv(imp,"feat_importance.csv")
 
 varImpPlot(df.rf)
