@@ -52,7 +52,7 @@ random_forest_training <- function(df){
 
   imp <- importance(df.rf)
   
-  results <- c(accuracy, accuracy_prob, errors, imp, probabilities)
+  results <- list(accuracy, accuracy_prob, errors, imp, probabilities)
   names(results) <- c("accuracy", "accuracyprob", "errors","imp","probs")
   
   return(results)
